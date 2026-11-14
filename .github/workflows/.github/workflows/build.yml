@@ -1,0 +1,29 @@
+name: Build PS4 Fan Control
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install OpenOrbis Toolchain
+        run: |
+          sudo apt-get update && sudo apt-get install -y wget unzip
+          # استخدام رابط بديل ومباشر لحزمة البناء لتجنب خطأ 404
+          git clone --depth 1 https://github.com/OpenOrbis/OpenOrbis-PS4-Toolchain.git OpenOrbis
+          echo "OO_PS4_TOOLCHAIN=$PWD/OpenOrbis" >> $GITHUB_ENV
+
+      - name: Build
+        run: |
+          mkdir -p build
+          $OO_PS4_TOOLCHAIN/bin/linux/ooc -o build/fan_control.elf src/main.c
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fan_control
+          path: build/fan_control.elf
+          
