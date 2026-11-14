@@ -15,7 +15,7 @@ jobs:
           mkdir -p build
           $OO_PS4_TOOLCHAIN/bin/linux/ooc -o build/fan_control.elf src/main.c
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: fan_control
           path: build/fan_control.elf
